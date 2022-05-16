@@ -4,20 +4,29 @@ import { useNavigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import shareVideo from '../assets/share.mp4';
 import logo from '../assets/logowhite.png';
-
+import {client} from "../client"
 const Login = () => {
     const navigate = useNavigate();
     const responseGoogle = (response) => {
+        //console.log(response,process.env.REACT_APP_GOOGLE_API_TOKEN)
         localStorage.setItem('user', JSON.stringify(response.profileObj));
-        const { name, googleId, imageUrl } = response.profileObj;
+       // console.log("Hi",response)
+        //const { name, googleId, imageUrl } = response.profileObj;
         const doc = {
-          _id: googleId,
+          _id: "amanvista",
           _type: 'user',
-          userName: name,
-          image: imageUrl,
+          userName: "amanvista",
+          image: "https://images.unsplash.com/photo-1534361960057-19889db9621e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
         };
+        client.createIfNotExists(doc).then(() => {
+            navigate('/', { replace: true });
+          });
+
         
       };
+    const responseFailure=(message)=>{
+        alert(message)
+    }
 
   return (
     <div className="flex justify-start items-center flex-col h-screen">
@@ -53,7 +62,7 @@ const Login = () => {
               )}
               onSuccess={responseGoogle}
               onFailure={responseGoogle}
-              cookiePolicy="single_host_origin"
+              cookiePolicy={"single_host_origin"}
             />
           </div>
         </div>
